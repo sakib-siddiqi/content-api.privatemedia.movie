@@ -56,7 +56,8 @@ jobs:
           source: "deploy/*"
           target: ${{ secrets.VPS_TARGET_DIR }}
           strip_components: 1
-          rm: true
+          rm: false
+          overwrite: true
 
       # 8. Install production dependencies and restart app
       - name: Install dependencies and restart application
