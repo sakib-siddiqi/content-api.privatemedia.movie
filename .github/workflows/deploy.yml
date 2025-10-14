@@ -72,17 +72,3 @@ jobs:
             
             # Install production dependencies only
             /home/mdshahin/.nvm/versions/node/v22.18.0/bin/npm ci --omit=dev
-            
-            # Set proper permissions
-            chmod -R 755 .
-            
-            # Restart application using PM2 with ecosystem config
-            /home/mdshahin/.nvm/versions/node/v22.18.0/bin/pm2 reload ecosystem.config.js --update-env || /home/mdshahin/.nvm/versions/node/v22.18.0/bin/pm2 start ecosystem.config.js
-            
-            # Save PM2 process list
-            /home/mdshahin/.nvm/versions/node/v22.18.0/bin/pm2 save
-            
-            echo "Deployment completed successfully!"
-            
-            # Show app status
-            /home/mdshahin/.nvm/versions/node/v22.18.0/bin/pm2 status
