@@ -12,6 +12,7 @@ import { TrendingModule } from './trending/trending.module';
 import { TcpModule } from './tcp/tcp.module';
 import { GuardsModule } from './guards/guards.module';
 import { ContentModule } from './content/content.module';
+import { StreamModule } from './stream/stream.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ContentModule } from './content/content.module';
     TcpModule,
     GuardsModule,
     ContentModule,
+    StreamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
