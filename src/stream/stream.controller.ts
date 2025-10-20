@@ -5,15 +5,24 @@ import { StreamService } from './stream.service';
 export class StreamController {
     constructor(private readonly streamService: StreamService) { }
 
-    @Get(':type/:id/:seasonNumber?/:episodeNumber?')
-    async getStreamUrl(
-        @Param('type') type: string,
-        @Param('id', ParseIntPipe) id: number,
-        @Param('seasonNumber', ParseIntPipe) seasonNumber?: number,
-        @Param('episodeNumber', ParseIntPipe) episodeNumber?: number
+    @Get('/movie/:id')
+    async getMovieStreamUrl(
+        @Param('id', ParseIntPipe) id: number
     ) {
         return this.streamService.getStreamUrl({
-            type,
+            type: 'movie',
+            id,
+        });
+    }
+
+    @Get('/tv-series/:id/:seasonNumber/:episodeNumber')
+    async getTVShowStreamUrl(
+        @Param('id', ParseIntPipe) id: number,
+        @Param('seasonNumber', ParseIntPipe) seasonNumber: number,
+        @Param('episodeNumber', ParseIntPipe) episodeNumber: number
+    ) {
+        return this.streamService.getStreamUrl({
+            type: 'tv-series',
             id,
             seasonNumber,
             episodeNumber
