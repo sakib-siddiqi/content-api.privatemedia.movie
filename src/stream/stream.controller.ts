@@ -40,7 +40,6 @@ export class StreamController {
     @UseGuards(AuthGuard)
     @UseGuards(SubscriberGuard)
     @Get('/movie/embed/:id')
-    @Redirect()
     async getMovieStreamEmbed(
         @Param('id') id: string
     ) {
@@ -48,12 +47,13 @@ export class StreamController {
         console.log(link)
         return {
             url: link,
-            statusCode: 302
+            statusCode: 200
         }
     }
 
+    @UseGuards(AuthGuard)
+    @UseGuards(SubscriberGuard)
     @Get('/tv-series/embed/:id/:seasonNumber/:episodeNumber')
-    @Redirect()
     async getTVShowStreamEmbed(
         @Param('id') id: string,
         @Param('seasonNumber', ParseIntPipe) seasonNumber: number,
@@ -62,7 +62,7 @@ export class StreamController {
         const link = await this.streamService.getTVShowStreamEmbed(id, seasonNumber, episodeNumber);
         return {
             url: link,
-            statusCode: 302
+            statusCode: 200
         }
     }
 }
