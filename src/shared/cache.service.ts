@@ -24,8 +24,8 @@ export class CacheService implements OnModuleInit {
       this.logger.log('✅ Redis connection validated');
 
       // Test database connection
-      await this.sequelize.authenticate();
-      this.logger.log('✅ Database connection validated');
+      // await this.sequelize.authenticate();
+      // this.logger.log('✅ Database connection validated');
     } catch (error) {
       this.logger.error('❌ Connection validation failed:', error.message);
       throw error;

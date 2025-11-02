@@ -1,7 +1,13 @@
 import { BadRequestException, Injectable as NestInjectable } from '@nestjs/common';
+import axios from 'axios';
+import { PuppeterService } from 'src/common/services/puppeter.service';
 
 @NestInjectable()
 export class StreamService {
+    constructor(private readonly puppeterService: PuppeterService) { }
+    static ACCESS_KEY = 'os44dzy5gudl92lj';
+    static BASE_URL = 'https://embedmaster.link/';
+    static BASE_PLAYER = 'https://embdmstrplayer.com/';
     async getStreamUrl(query: { type?: string; id?: number | string, seasonNumber?: number, episodeNumber?: number }) {
         const { type, id } = query;
 
@@ -24,41 +30,34 @@ export class StreamService {
     }
 
     getMovieStreamUrl(id: number) {
-        const url = new URL(`https://player.vidify.top/embed/movie/${id}`);
-        url.searchParams.set('autoplay', 'false');
-        url.searchParams.set('poster', 'true');
-        url.searchParams.set('chromecast', 'true');
-        url.searchParams.set('servericon', 'true');
-        url.searchParams.set('setting', 'true');
-        url.searchParams.set('pip', 'true');
-        url.searchParams.set('font', 'Roboto');
-        url.searchParams.set('fontcolor', '6f63ff');
-        url.searchParams.set('fontsize', '20');
-        url.searchParams.set('opacity', '0.5');
-        url.searchParams.set('primarycolor', '3b82f6');
-        url.searchParams.set('secondarycolor', '1f2937');
-        url.searchParams.set('iconcolor', 'ffffff');
-
+        const url = new URL(`https://embedmaster.link/${StreamService.ACCESS_KEY}/movie/${id}`);
         return url.href;
     }
 
     getTVShowStreamUrl(id: number, seasonNumber: number, episodeNumber: number) {
-        const url = new URL(`https://player.vidify.top/embed/tv/${id}/${seasonNumber}/${episodeNumber}`);
-        url.searchParams.set('autoplay', 'true');
-        url.searchParams.set('poster', 'true');
-        url.searchParams.set('chromecast', 'true');
-        url.searchParams.set('servericon', 'true');
-        url.searchParams.set('setting', 'true');
-        url.searchParams.set('pip', 'true');
-        url.searchParams.set('logourl', 'https://i.ibb.co/67wTJd9R/pngimg-com-netflix-PNG11.png');
-        url.searchParams.set('font', 'Roboto');
-        url.searchParams.set('fontcolor', '6f63ff');
-        url.searchParams.set('fontsize', '20');
-        url.searchParams.set('opacity', '0.5');
-        url.searchParams.set('primarycolor', '3b82f6');
-        url.searchParams.set('secondarycolor', '1f2937');
-        url.searchParams.set('iconcolor', 'ffffff');
-
+        const url = new URL(`https://embedmaster.link/${StreamService.ACCESS_KEY}/tv/${id}/${seasonNumber}/${episodeNumber}`);
         return url.href;
+    }
+
+    async getMovieStreamEmbed(id: string) {
+        try {
+            const url = new URL(`${StreamService.BASE_URL}${StreamService.ACCESS_KEY}/movie/${id}`);
+            const response = await axios.get(url.href);
+            const embedUrl = await this.puppeterService.getEmbedMasterUrl(response.data);
+            const fullUrl = new URL(StreamService.BASE_PLAYER);
+            fullUrl.pathname = embedUrl || '';
+            return fullUrl.href;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getTVShowStreamEmbed(id: string, seasonNumber: number, episodeNumber: number) {
+        const url = new URL(`${StreamService.BASE_URL}${StreamService.ACCESS_KEY}/tv/${id}/${seasonNumber}/${episodeNumber}`);
+        const response = await axios.get(url.href);
+        const embedUrl = await this.puppeterService.getEmbedMasterUrl(response.data);
+        const fullUrl = new URL(StreamService.BASE_PLAYER);
+        fullUrl.pathname = embedUrl || '';
+        return fullUrl.href;
     }
 }
