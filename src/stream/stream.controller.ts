@@ -38,7 +38,7 @@ export class StreamController {
     // }
 
     @UseGuards(AuthGuard)
-    @UseGuards(SubscriberGuard)
+    //@UseGuards(SubscriberGuard)
     @Get('/movie/embed/:id')
     async getMovieStreamEmbed(
         @Param('id') id: string
@@ -52,7 +52,7 @@ export class StreamController {
     }
 
     @UseGuards(AuthGuard)
-    @UseGuards(SubscriberGuard)
+    //@UseGuards(SubscriberGuard)
     @Get('/tv-series/embed/:id/:seasonNumber/:episodeNumber')
     async getTVShowStreamEmbed(
         @Param('id') id: string,
