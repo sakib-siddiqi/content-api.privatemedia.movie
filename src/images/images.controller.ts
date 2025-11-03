@@ -1,12 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Redirect } from '@nestjs/common';
 import { ImagesService } from './images.service';
 
 @Controller('images')
 export class ImagesController {
-  constructor(private readonly imagesService: ImagesService) {}
+  constructor(private readonly imagesService: ImagesService) { }
 
+  @Redirect()
   @Get('pm-movie/:fileName')
   async getTmdbImage(@Param('fileName') fileName: string) {
-    return this.imagesService.uploadMovieSiteImage(fileName);
+    const url = await this.imagesService.uploadMovieSiteImage(fileName);
+    return {
+      url: url,
+      statusCode: 302,
+    }
   }
 }
