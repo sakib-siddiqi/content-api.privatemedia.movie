@@ -13,10 +13,10 @@ async function bootstrap() {
 
   try {
     const app = await NestFactory.create(AppModule);
-    app.use(morgan('combined', { stream: logStream, }));
+    app.use(morgan('combined', { stream: logStream }));
     app.use(morgan('dev'));
     app.enableCors({
-      origin:'*'
+      origin: '*'
     })
     await app.listen(process.env.PORT ?? 3000);
     console.log(`🚀 Server started on port : ${process.env.PORT ?? 3000}`);

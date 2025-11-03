@@ -21,14 +21,18 @@ export class ImagesService {
     }
 
     async uploadMovieSiteImage(fileName: string) {
-        const fileBuffer = await this.getTmdbImage(fileName);
-        await this.supabaseStorageService.uploadFile(
-            SupabaseStorageService.BUCKETS.movieSiteImages,
-            fileName,
-            fileBuffer,     
-            'image/jpeg'
-        );
-        const publicUrl = await this.supabase.storage.from(SupabaseStorageService.BUCKETS.movieSiteImages).getPublicUrl(fileName);
-        return publicUrl.data.publicUrl;
+        try {
+            const fileBuffer = await this.getTmdbImage(fileName);
+            await this.supabaseStorageService.uploadFile(
+                SupabaseStorageService.BUCKETS.movieSiteImages,
+                fileName,
+                fileBuffer,
+                'image/jpeg'
+            );
+            const publicUrl = await this.supabase.storage.from(SupabaseStorageService.BUCKETS.movieSiteImages).getPublicUrl(fileName);
+            return publicUrl.data.publicUrl;
+        } catch (error) {
+            return null;
+        }
     }
 }
